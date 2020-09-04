@@ -99,8 +99,8 @@ with DAG(
         python_callable=print_stuff,
         executor_config={
             "KubernetesExecutor": {
-                # "namespace": "test-namespace",
-                "namespace": "default",
+                "namespace": "test-namespace",
+                # "namespace": "default",
                 "labels": {
                     "release": "stable"
                 }
