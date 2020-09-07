@@ -19,7 +19,7 @@ default_args = {
 dag = DAG(
     'kubernetes_sample', default_args=default_args, catchup=False, schedule_interval=timedelta(minutes=10))
 
-start = DummyOperator(task_id='run_this_first', dag=dag)
+# start = DummyOperator(task_id='run_this_first', dag=dag)
 
 passing = KubernetesPodOperator(namespace='default',
                                 image="python:3.6",
@@ -32,16 +32,16 @@ passing = KubernetesPodOperator(namespace='default',
                                 dag=dag
                                 )
 
-failing = KubernetesPodOperator(namespace='default',
-                                image="ubuntu:1604",
-                                cmds=["python", "-c"],
-                                arguments=["print('hello world')"],
-                                labels={"test-airflow": "firstversion"},
-                                name="fail",
-                                task_id="failing-task",
-                                get_logs=True,
-                                dag=dag
-                                )
+# failing = KubernetesPodOperator(namespace='default',
+#                                 image="ubuntu:1604",
+#                                 cmds=["python", "-c"],
+#                                 arguments=["print('hello world')"],
+#                                 labels={"test-airflow": "firstversion"},
+#                                 name="fail",
+#                                 task_id="failing-task",
+#                                 get_logs=True,
+#                                 dag=dag
+#                                 )
 
-passing.set_upstream(start)
-failing.set_upstream(start)
+# passing.set_upstream(start)
+# failing.set_upstream(start)
