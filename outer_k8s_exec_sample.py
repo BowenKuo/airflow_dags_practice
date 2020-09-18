@@ -17,7 +17,9 @@ default_args = {
 }
 
 dag = DAG(
-    'outer_kubernetes_sample', default_args=default_args, catchup=False, schedule_interval=timedelta(minutes=10))
+    dag_id = 'outer_kubernetes_sample',
+    default_args=default_args,
+    catchup=False, schedule_interval=timedelta(minutes=10))
 
 # start = DummyOperator(task_id='run_this_first', dag=dag)
 
