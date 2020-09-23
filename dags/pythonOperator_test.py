@@ -10,7 +10,7 @@ args = {
 }
 
 dag = DAG(
-    dag_id='example_python_operator',
+    dag_id='python_operator',
     default_args=args,
     schedule_interval=None,
     start_date=days_ago(2),
@@ -24,7 +24,7 @@ def print_context(ds, **kwargs):
 
 
 run_this = PythonOperator(
-    task_id='print_the_context',
+    task_id='print_context',
     provide_context=True,
     python_callable=print_context,
     dag=dag,
