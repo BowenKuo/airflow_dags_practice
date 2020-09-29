@@ -14,7 +14,7 @@ default_args = {
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
-    'retries': 1,
+    'retries': 0,
     'retry_delay': timedelta(seconds=10)
 }
 
@@ -36,10 +36,14 @@ volume_mount = VolumeMount('git_root_path',
                             sub_path=None,
                             read_only=True)
 volume_config = {
-    'hostPath':
-    {
-        'path': git_root_path
-    }
+    'persistentVolumeClaim':
+      {
+        'claimName': 'test-volume'
+      }
+    # 'hostPath':
+    # {
+    #     'path': git_root_path
+    # }
 }
 volume = Volume(name='git_root_path', configs=volume_config)
 
