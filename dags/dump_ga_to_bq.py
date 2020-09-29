@@ -32,14 +32,15 @@ executalbe_r_script_name = "dump_ga_to_bq.R"
 executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
 
 volume_mount = VolumeMount('git-root-path',
-                            mount_path='/gg',
+                            mount_path=git_root_path,
                             sub_path=None,
                             read_only=False)
 volume_config = {
     'hostPath':
     {
-        'path': git_root_path,
-        "type": "DirectoryOrCreate"
+        # 'path': git_root_path,
+        'path': '/home',
+        "type": "Directory"
     }
 }
 volume = Volume(name='git-root-path', configs=volume_config)
