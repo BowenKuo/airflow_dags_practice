@@ -53,6 +53,7 @@ k = KubernetesPodOperator(namespace='default',
                           task_id="dumpping",
                           volume=[volume],
                           volume_mounts=[volume_mount],
+                          is_delete_operator_pod=False,
                           get_logs=True,
                           dag=dag
                           )
