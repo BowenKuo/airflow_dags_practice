@@ -38,8 +38,8 @@ volume_mount = VolumeMount('git-root-path',
 volume_config = {
     'hostPath':
     {
-        # 'path': git_root_path,
-        'path': '/home',
+        'path': git_root_path,
+        # 'path': '/home',
         "type": "Directory"
     }
 }
