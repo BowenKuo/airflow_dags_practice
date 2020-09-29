@@ -4,6 +4,8 @@ from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOpera
 from airflow.kubernetes.secret import Secret
 from airflow.kubernetes.volume import Volume
 from airflow.kubernetes.volume_mount import VolumeMount
+from airflow.utils.dates import days_ago
+from datetime import datetime, timedelta
 
 default_args = {
     'owner': 'airflow',
