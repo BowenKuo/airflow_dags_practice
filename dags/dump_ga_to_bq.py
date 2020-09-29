@@ -22,7 +22,7 @@ dag = DAG(
     'shits',
     default_args=default_args,
     catchup=False,
-    schedule_interval=timedelta(minutes=10))
+    schedule_interval=timedelta(horus=10))
 
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'bonio-da-958b900cd287.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'client_secret_953933740389-gdq7ift55a027a26vjvv37j5mkfcvue3.apps.googleusercontent.com.json')
@@ -34,7 +34,7 @@ executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
 volume_mount = VolumeMount('git-root-path',
                             mount_path=git_root_path,
                             sub_path=None,
-                            read_only=True)
+                            read_only=False)
 volume_config = {
     'hostPath':
     {
