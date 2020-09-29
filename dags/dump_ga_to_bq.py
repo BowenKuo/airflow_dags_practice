@@ -31,21 +31,21 @@ git_root_path = os.environ['AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT']
 executalbe_r_script_name = "dump_ga_to_bq.R"
 executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
 
-volume_mount = VolumeMount('git-root-path',
-                            mount_path=git_root_path,
-                            sub_path=None,
-                            read_only=True)
-volume_config = {
-    # 'persistentVolumeClaim':
-    #   {
-    #     'claimName': 'test-volume'
-    #   }
-    'hostPath':
-    {
-        'path': git_root_path
-    }
-}
-volume = Volume(name='git-root-path', configs=volume_config)
+# volume_mount = VolumeMount('git-root-path',
+#                             mount_path=git_root_path,
+#                             sub_path=None,
+#                             read_only=True)
+# volume_config = {
+#     # 'persistentVolumeClaim':
+#     #   {
+#     #     'claimName': 'test-volume'
+#     #   }
+#     'hostPath':
+#     {
+#         'path': git_root_path
+#     }
+# }
+# volume = Volume(name='git-root-path', configs=volume_config)
 
 k = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:latest",
@@ -55,8 +55,8 @@ k = KubernetesPodOperator(namespace='default',
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="dump-ga-to-bq",
                           task_id="dumpping",
-                          volume=[volume],
-                          volume_mounts=[volume_mount],
+                          # volume=[volume],
+                          # volume_mounts=[volume_mount],
                           is_delete_operator_pod=False,
                           get_logs=True,
                           dag=dag
