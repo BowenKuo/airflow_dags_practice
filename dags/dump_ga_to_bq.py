@@ -31,21 +31,21 @@ git_root_path = os.environ['AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT']
 executalbe_r_script_name = "dump_ga_to_bq.R"
 executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
 
-volume_mount = VolumeMount('git_root_path',
+volume_mount = VolumeMount('git-root-path',
                             mount_path=git_root_path,
                             sub_path=None,
                             read_only=True)
 volume_config = {
-    'persistentVolumeClaim':
-      {
-        'claimName': 'test-volume'
-      }
-    # 'hostPath':
-    # {
-    #     'path': git_root_path
-    # }
+    # 'persistentVolumeClaim':
+    #   {
+    #     'claimName': 'test-volume'
+    #   }
+    'hostPath':
+    {
+        'path': git_root_path
+    }
 }
-volume = Volume(name='git_root_path', configs=volume_config)
+volume = Volume(name='git-root-path', configs=volume_config)
 
 k = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:latest",
