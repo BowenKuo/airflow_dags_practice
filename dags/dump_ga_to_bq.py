@@ -15,11 +15,11 @@ default_args = {
     'email_on_failure': True,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=5)
+    'retry_delay': timedelta(seconds=10)
 }
 
 dag = DAG(
-    'dump_ga_to_bq',
+    'shits',
     default_args=default_args,
     catchup=False,
     schedule_interval=timedelta(minutes=10))
@@ -39,8 +39,7 @@ k = KubernetesPodOperator(namespace='default',
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="dump-ga-to-bq",
                           task_id="dumpping",
-                          is_delete_operator_pod=True,
-                          hostnetwork=False,
+                          # is_delete_operator_pod=True,
                           get_logs=True,
                           dag=dag
                           )
