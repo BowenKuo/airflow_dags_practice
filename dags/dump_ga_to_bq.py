@@ -31,6 +31,18 @@ git_root_path = os.environ['AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT']
 executalbe_r_script_name = "dump_ga_to_bq.R"
 executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
 
+volume_mount = VolumeMount('git_root_path',
+                            mount_path=git_root_path,
+                            sub_path=None,
+                            read_only=True)
+volume_config = {
+    'hostPath':
+    {
+        'path': git_root_path
+    }
+}
+volume = Volume(name='git_root_path', configs=volume_config)
+
 k = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:latest",
                           cmds=["Rscript", executalbe_r_script_path],
@@ -39,7 +51,8 @@ k = KubernetesPodOperator(namespace='default',
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="dump-ga-to-bq",
                           task_id="dumpping",
-                          # is_delete_operator_pod=True,
+                          volume=[volume],
+                          volume_mounts=[volume_mount],
                           get_logs=True,
                           dag=dag
                           )
