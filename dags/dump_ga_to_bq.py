@@ -39,7 +39,7 @@ volume_config = {
     'hostPath':
     {
         'path': git_root_path,
-        "type": "Directory"
+        "type": "DirectoryOrCreate"
     }
 }
 volume = Volume(name='git-root-path', configs=volume_config)
