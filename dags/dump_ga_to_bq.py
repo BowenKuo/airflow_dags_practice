@@ -28,7 +28,7 @@ service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-sy
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'client_secret_953933740389-gdq7ift55a027a26vjvv37j5mkfcvue3.apps.googleusercontent.com.json')
 
 git_root_path = os.environ['AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT']
-executalbe_r_script_name = "dump_ga_to_bq.R"
+executalbe_r_script_name = "repo/dump_ga_to_bq.R"
 executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
 
 volume_mount = VolumeMount('git-root-path',
