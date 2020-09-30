@@ -19,7 +19,7 @@ default_args = {
 }
 
 dag = DAG(
-    'shits',
+    'ohoh',
     default_args=default_args,
     catchup=False,
     schedule_interval=timedelta(hours=10))
@@ -38,7 +38,7 @@ volume_mount = VolumeMount('git-root-path',
 volume_config = {
     'hostPath':
     {
-        'path': git_root_path,
+        'path': "/home/DA_git_master",
         # 'path': '/home',
         "type": "Directory"
     }
