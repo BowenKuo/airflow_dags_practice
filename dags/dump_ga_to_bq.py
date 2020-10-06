@@ -22,7 +22,7 @@ dag = DAG(
     'dump_GA_to_BQ_DAG',
     default_args = default_args,
     schedule_interval = '@daily',
-    catchup = False)
+    catchup = True)
 
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
