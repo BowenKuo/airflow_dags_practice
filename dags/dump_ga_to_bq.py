@@ -45,11 +45,9 @@ volume_config = {
 volume = Volume(name='git-root-path', configs=volume_config)
 
 k = KubernetesPodOperator(namespace='default',
-                          image="bowenkuo/dump-ga-to-bq:latest",
+                          image="bowenkuo/dump-ga-to-bq:1.0.1",
                           cmds=["Rscript"],
                           arguments=[executalbe_r_script_whole_path],
-                          # cmds=["ls"],
-                          # arguments=[script_root_path + "/Services/ELT/DA"],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="dump-ga-to-bq",
