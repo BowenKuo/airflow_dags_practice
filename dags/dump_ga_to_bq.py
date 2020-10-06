@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    # 'start_date': days_ago(1),
+    'start_date': datetime(2020,09,06),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -21,7 +21,6 @@ default_args = {
 dag = DAG(
     'dump_GA_to_BQ_DAG',
     default_args=default_args,
-    start_date=datetime(2020,09,06),
     catchup=False,
     schedule_interval='@daily')
 
@@ -48,7 +47,7 @@ volume = Volume(name='git-root-path', configs=volume_config)
 k = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:1.0.1",
                           cmds=["Rscript"],
-                          arguments=["--vanilla", 
+                          arguments=["--vanilla",
                                      executalbe_r_script_whole_path,
                                      "{{ ds }}"],
                           labels={"script_type": "R"},
