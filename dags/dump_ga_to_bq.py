@@ -11,6 +11,7 @@ default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2020,09,06),
+    'schedule_interval': '@daily',
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -21,8 +22,7 @@ default_args = {
 dag = DAG(
     'dump_GA_to_BQ_DAG',
     default_args=default_args,
-    catchup=False,
-    schedule_interval='@daily')
+    catchup=False)
 
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
