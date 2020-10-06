@@ -10,7 +10,6 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2020,9,6),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -22,6 +21,8 @@ dag = DAG(
     'dump_GA_to_BQ_DAG',
     default_args = default_args,
     schedule_interval = '@daily',
+    max_active_runs = 1,
+    start_date = datetime(2020,9,6),
     catchup = True)
 
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
