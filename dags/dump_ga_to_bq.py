@@ -13,7 +13,7 @@ default_args = {
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
-    'retries': 0,
+    'retries': 1,
     'retry_delay': timedelta(seconds=10)
 }
 
@@ -21,7 +21,7 @@ dag = DAG(
     'dump_GA_to_BQ_DAG',
     default_args = default_args,
     schedule_interval = '@daily',
-    max_active_runs = 1,
+    # max_active_runs = 1,
     start_date = datetime(2020,9,6),
     catchup = False)
 
