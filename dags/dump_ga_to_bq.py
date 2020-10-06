@@ -23,7 +23,7 @@ dag = DAG(
     schedule_interval = '@daily',
     max_active_runs = 1,
     start_date = datetime(2020,9,6),
-    catchup = True)
+    catchup = False)
 
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
