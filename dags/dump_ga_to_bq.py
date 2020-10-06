@@ -10,6 +10,7 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
+    'start_date': days_ago(1),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -22,10 +23,10 @@ dag = DAG(
     default_args = default_args,
     schedule_interval = '@daily',
     # max_active_runs = 1,
-    start_date = datetime(2020,9,6),
+    # start_date = datetime(2020,9,6),
     catchup = False)
 
-service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
+service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-service-account-json', 'ga-service-account.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
 
 script_root_path = '/tmp/scripts'
