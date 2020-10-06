@@ -27,7 +27,7 @@ dag = DAG(
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
 
-script_root_path = '/home/scripts'
+script_root_path = '/tmp/scripts'
 executalbe_r_script_path = "Services/ELT/DA/dump_ga_to_bq.R"
 executalbe_r_script_whole_path = script_root_path + "/" + executalbe_r_script_path
 
@@ -49,7 +49,7 @@ k = KubernetesPodOperator(namespace='default',
                           # cmds=["Rscript"],
                           # arguments=[executalbe_r_script_whole_path],
                           cmds=["ls"],
-                          arguments=["/home/scripts/*"],
+                          arguments=[script_root_path],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="dump-ga-to-bq",
