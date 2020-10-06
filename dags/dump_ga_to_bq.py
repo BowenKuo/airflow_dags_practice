@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2020,09,06),
+    'start_date': datetime(2020,9,6),
     'schedule_interval': '@daily',
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
