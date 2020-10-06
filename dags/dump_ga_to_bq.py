@@ -24,22 +24,21 @@ dag = DAG(
     catchup=False,
     schedule_interval=timedelta(hours=10))
 
-service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'bonio-da-958b900cd287.json')
-client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'client_secret_953933740389-gdq7ift55a027a26vjvv37j5mkfcvue3.apps.googleusercontent.com.json')
+service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-system-account-json', 'ga-system-account.json')
+client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
 
-git_root_path = os.environ['AIRFLOW__KUBERNETES__GIT_DAGS_FOLDER_MOUNT_POINT']
-executalbe_r_script_name = "repo/dump_ga_to_bq.R"
-executalbe_r_script_path = git_root_path + "/" + executalbe_r_script_name
+script_root_path = '/home/scripts'
+executalbe_r_script_path = "Services/ELT/DA/dump_ga_to_bq.R"
+executalbe_r_script_whole_path = script_root_path + "/" + executalbe_r_script_path
 
 volume_mount = VolumeMount('git-root-path',
-                            mount_path=git_root_path,
+                            mount_path=script_root_path,
                             sub_path=None,
                             read_only=False)
 volume_config = {
     'hostPath':
     {
-        'path': "/home/DA_git_master",
-        # 'path': '/home',
+        'path': "/home/DA_git_master/DataAnalysis.git",
         "type": "Directory"
     }
 }
@@ -47,8 +46,8 @@ volume = Volume(name='git-root-path', configs=volume_config)
 
 k = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:latest",
-                          cmds=["Rscript", executalbe_r_script_path],
-                          arguments=[],
+                          cmds=["Rscript"],
+                          arguments=[executalbe_r_script_whole_path],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="dump-ga-to-bq",
