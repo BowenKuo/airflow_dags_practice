@@ -1,79 +1,62 @@
-from datetime import timedelta
-
-# The DAG object; we'll need this to instantiate a DAG
+import os
 from airflow import DAG
-# Operators; we need this to operate!
-from airflow.operators.bash_operator import BashOperator
+from airflow.contrib.operators.kubernetes_pod_operator import KubernetesPodOperator
+from airflow.kubernetes.secret import Secret
+from airflow.kubernetes.volume import Volume
+from airflow.kubernetes.volume_mount import VolumeMount
 from airflow.utils.dates import days_ago
-# These args will get passed on to each operator
-# You can override them on a per-task basis during operator initialization
+from datetime import datetime, timedelta
+
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': days_ago(2),
-    'email': ['airflow@example.com'],
-    'email_on_failure': False,
+    'start_date': datetime(2020,10,1),
+    'email': 'bowen.kuo@bonio.com.tw',
+    'email_on_failure': True,
     'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5),
-    # 'queue': 'bash_queue',
-    # 'pool': 'backfill',
-    # 'priority_weight': 10,
-    # 'end_date': datetime(2016, 1, 1),
-    # 'wait_for_downstream': False,
-    # 'dag': dag,
-    # 'sla': timedelta(hours=2),
-    # 'execution_timeout': timedelta(seconds=300),
-    # 'on_failure_callback': some_function,
-    # 'on_success_callback': some_other_function,
-    # 'on_retry_callback': another_function,
-    # 'sla_miss_callback': yet_another_function,
-    # 'trigger_rule': 'all_success'
+    'retries': 0,
+    'retry_delay': timedelta(seconds=10)
 }
+
 dag = DAG(
-    'tutorial',
-    default_args=default_args,
-    description='A simple tutorial DAG',
-    schedule_interval=timedelta(days=1),
-)
+    'dump_GA_to_BQ_DAG3',
+    default_args = default_args,
+    schedule_interval = '@daily',
+    catchup = False)
 
-# t1, t2 and t3 are examples of tasks created by instantiating operators
-t1 = BashOperator(
-    task_id='print_date',
-    bash_command='date',
-    dag=dag,
-)
+service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-service-account-json', 'ga-service-account.json')
+client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
 
-t2 = BashOperator(
-    task_id='sleep',
-    depends_on_past=False,
-    bash_command='sleep 5',
-    retries=3,
-    dag=dag,
-)
-dag.doc_md = __doc__
+script_root_path = '/tmp/scripts'
+executalbe_r_script_path = "Services/ELT/DA/dumpDA2BQ_testing.R"
+executalbe_r_script_whole_path = script_root_path + "/" + executalbe_r_script_path
 
-t1.doc_md = """\
-#### Task Documentation
-You can document your task using the attributes `doc_md` (markdown),
-`doc` (plain text), `doc_rst`, `doc_json`, `doc_yaml` which gets
-rendered in the UI's Task Instance Details page.
-![img](http://montcs.bloomu.edu/~bobmon/Semesters/2012-01/491/import%20soul.png)
-"""
-templated_command = """
-{% for i in range(5) %}
-    echo "{{ ds }}"
-    echo "{{ macros.ds_add(ds, 7)}}"
-    echo "{{ params.my_param }}"
-{% endfor %}
-"""
+volume_mount = VolumeMount('git-root-path',
+                            mount_path=script_root_path,
+                            sub_path=None,
+                            read_only=False)
+volume_config = {
+    'hostPath':
+    {
+        'path': "/home/DA_git_master/DataAnalysis.git",
+        "type": "Directory"
+    }
+}
+volume = Volume(name='git-root-path', configs=volume_config)
 
-t3 = BashOperator(
-    task_id='templated',
-    depends_on_past=False,
-    bash_command=templated_command,
-    params={'my_param': 'Parameter I passed in'},
-    dag=dag,
-)
-
-t1 >> [t2, t3]
+gimmy_task = KubernetesPodOperator(namespace='default',
+                          image="bowenkuo/dump-ga-to-bq:1.0.1",
+                          cmds=["Rscript"],
+                          arguments=["--vanilla",
+                                     executalbe_r_script_whole_path,
+                                     "{{ dt(execution_date) }}"],
+                          labels={"script_type": "R"},
+                          secrets=[service_account_secret_file, client_secret_secret_file],
+                          name="gg",
+                          task_id="yy",
+                          volumes=[volume],
+                          volume_mounts=[volume_mount],
+                          is_delete_operator_pod=False,
+                          get_logs=True,
+                          dag=dag
+                          )
