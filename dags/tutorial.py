@@ -19,7 +19,7 @@ default_args = {
 }
 
 dag = DAG(
-    'dump_GA_to_BQ_DAG3',
+    'ba_dag',
     default_args = default_args,
     schedule_interval = '@daily',
     catchup = False)
@@ -52,7 +52,7 @@ gimmy_task = KubernetesPodOperator(namespace='default',
                                      "{{ dt(execution_date) }}"],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
-                          name="gg",
+                          name="aa",
                           task_id="yy",
                           volumes=[volume],
                           volume_mounts=[volume_mount],
