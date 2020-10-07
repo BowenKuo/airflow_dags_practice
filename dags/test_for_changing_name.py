@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2020,9,6),
+    'start_date': datetime(2020,10,1),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -22,7 +22,8 @@ dag = DAG(
     'dump_GA_to_BQ_DAG2',
     default_args = default_args,
     schedule_interval = '@daily',
-    catchup = False)
+    catchup = True,
+    max_active_runs = 1)
 
 service_account_secret_file = Secret('volume', '/etc/ga_service_account', 'ga-service-account-json', 'ga-service-account.json')
 client_secret_secret_file = Secret('volume', '/etc/ga_client_secret', 'ga-client-secret-json', 'ga-client-secret.json')
@@ -49,7 +50,7 @@ gimmy_task = KubernetesPodOperator(namespace='default',
                           cmds=["Rscript"],
                           arguments=["--vanilla",
                                      executalbe_r_script_whole_path,
-                                     "{{ dt }}"],
+                                     "{{ dt(execution_date) }}"],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="gg",
