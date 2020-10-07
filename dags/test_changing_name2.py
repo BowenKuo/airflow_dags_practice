@@ -19,7 +19,7 @@ default_args = {
 }
 
 dag = DAG(
-    'ba_dag',
+    'just_a_dag',
     default_args = default_args,
     schedule_interval = '@daily',
     catchup = False)
@@ -49,11 +49,11 @@ gimmy_task = KubernetesPodOperator(namespace='default',
                           cmds=["Rscript"],
                           arguments=["--vanilla",
                                      executalbe_r_script_whole_path,
-                                     "{{ dt(execution_date) }}"],
+                                     "{{ ds }}"],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
-                          name="aa",
-                          task_id="yy",
+                          name="bb",
+                          task_id="cc",
                           volumes=[volume],
                           volume_mounts=[volume_mount],
                           is_delete_operator_pod=False,
