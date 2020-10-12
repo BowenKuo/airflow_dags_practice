@@ -23,7 +23,7 @@ MAIN_DAG_ID = "ba_dag"
 main_dag = DAG(
     MAIN_DAG_ID,
     default_args = default_args,
-    schedule_interval = '@quarterly',
+    schedule_interval = '@weekly',
     catchup = True,
     max_active_runs = 1)
 
