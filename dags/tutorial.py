@@ -74,8 +74,7 @@ SUBDAG_TASK_ID = "session_activity_dag"
 from airflow.operators.subdag_operator import SubDagOperator
 def get_user_session_activity(dag_id, start_date, end_date, uids):
     sub_dag = DAG(
-        dag_id=dag_id,
-        schedule_interval='@once')
+        dag_id=dag_id)
     for uid in uids[0:9]:
         user_session_activity = KubernetesPodOperator(namespace='default',
                                   image="bowenkuo/dump-ga-to-bq:1.0.1",
