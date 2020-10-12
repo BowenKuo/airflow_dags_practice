@@ -45,13 +45,16 @@ volume_config = {
 }
 volume = Volume(name='git-root-path', configs=volume_config)
 
+start_date = "{{ ds }}"
+end_date = ds_add("{{ next_ds }}", -1)
+
 gimmy_task = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:1.0.1",
                           cmds=["Rscript"],
                           arguments=["--vanilla",
                                      executalbe_r_script_whole_path,
-                                     "{{ ds }}",
-                                     "{{ next_ds }}"],
+                                     start_date,
+                                     end_date],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="aa",
