@@ -21,7 +21,7 @@ default_args = {
 dag = DAG(
     'ba_dag',
     default_args = default_args,
-    schedule_interval = '@monthly',
+    schedule_interval = '@weekly',
     catchup = True,
     max_active_runs = 1)
 
