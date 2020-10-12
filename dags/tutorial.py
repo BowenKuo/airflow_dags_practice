@@ -11,6 +11,7 @@ default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
     'start_date': datetime(2020,1,1),
+    'end_date': datetime(2020,9,30),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -21,7 +22,7 @@ default_args = {
 dag = DAG(
     'ba_dag',
     default_args = default_args,
-    schedule_interval = '@weekly',
+    schedule_interval = '@quarterly',
     catchup = True,
     max_active_runs = 1)
 
@@ -63,6 +64,6 @@ gimmy_task = KubernetesPodOperator(namespace='default',
                           volume_mounts=[volume_mount],
                           is_delete_operator_pod=False,
                           get_logs=True,
-                          xcom_push=True,
+                          do_xcom_push=True,
                           dag=dag
                           )
