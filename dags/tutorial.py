@@ -14,7 +14,7 @@ default_args = {
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
-    'retries': 2,
+    'retries': 0,
     'retry_delay': timedelta(seconds=10)
 }
 
@@ -63,5 +63,6 @@ gimmy_task = KubernetesPodOperator(namespace='default',
                           volume_mounts=[volume_mount],
                           is_delete_operator_pod=False,
                           get_logs=True,
+                          xcom_push=True,
                           dag=dag
                           )
