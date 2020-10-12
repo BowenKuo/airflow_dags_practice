@@ -92,20 +92,21 @@ def get_user_session_activity(dag_id, start_date, end_date, uids):
                                   volume_mounts=[volume_mount],
                                   is_delete_operator_pod=False,
                                   get_logs=True,
-                                  do_xcom_push=False,
+                                  do_xcom_push=True,
                                   dag=sub_dag
                                   )
     return sub_dag
 
-uids = "1000001" # context['ti'].xcom_pull(task_ids='get_user_ids_task', dag_id=MAIN_DAG_ID, key='retrun_value')
+uids = "{{ ti.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value') }}"
+print(uids)
 
-user_session_activity = SubDagOperator(
-    task_id=SUBDAG_TASK_ID,
-    subdag=get_user_session_activity('%s.%s' % (MAIN_DAG_ID, SUBDAG_TASK_ID),
-               start_date = start_date,
-               end_date = end_date,
-               uids = uids),
-    dag=main_dag)
-
-
-get_user_ids_task >> user_session_activity
+# user_session_activity = SubDagOperator(
+#     task_id=SUBDAG_TASK_ID,
+#     subdag=get_user_session_activity('%s.%s' % (MAIN_DAG_ID, SUBDAG_TASK_ID),
+#                start_date = start_date,
+#                end_date = end_date,
+#                uids = uids),
+#     dag=main_dag)
+#
+#
+# get_user_ids_task >> user_session_activity
