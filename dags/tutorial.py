@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2019,9,1),
+    'start_date': datetime(2020,1,1),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
@@ -21,7 +21,7 @@ default_args = {
 dag = DAG(
     'ba_dag',
     default_args = default_args,
-    schedule_interval = '@daily',
+    schedule_interval = '@monthly',
     catchup = True,
     max_active_runs = 1)
 
@@ -50,7 +50,8 @@ gimmy_task = KubernetesPodOperator(namespace='default',
                           cmds=["Rscript"],
                           arguments=["--vanilla",
                                      executalbe_r_script_whole_path,
-                                     "{{ ds }}"],
+                                     "{{ ds }}",
+                                     "{{ next_ds }}"],
                           labels={"script_type": "R"},
                           secrets=[service_account_secret_file, client_secret_secret_file],
                           name="aa",
