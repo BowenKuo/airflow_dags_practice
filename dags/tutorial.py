@@ -98,7 +98,7 @@ def get_user_session_activity(dag_id, start_date, end_date, **kwargs):
                                   )
     return sub_dag
 
-uids = task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
+# uids = task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
 # uids = "{{ ti.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value') }}"
 # print(uids)
 
