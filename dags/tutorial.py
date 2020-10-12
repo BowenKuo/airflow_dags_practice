@@ -46,7 +46,7 @@ volume_config = {
 volume = Volume(name='git-root-path', configs=volume_config)
 
 start_date = "{{ ds }}"
-end_date = ds_add("{{ next_ds }}", -1)
+end_date = "{{ macros.ds_add(next_ds, -1) }}""
 
 gimmy_task = KubernetesPodOperator(namespace='default',
                           image="bowenkuo/dump-ga-to-bq:1.0.1",
