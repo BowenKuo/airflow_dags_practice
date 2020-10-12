@@ -97,8 +97,7 @@ def get_user_session_activity(dag_id, start_date, end_date, uids):
                                   )
     return sub_dag
 
-
-uids = "{{ ti.xcom_pull(task_ids='get_user_ids_task', dag_id='%s', key='retrun_value') }}" % (MAIN_DAG_ID)
+uids = context['ti'].xcom_pull(task_ids='get_user_ids_task', dag_id=MAIN_DAG_ID, key='retrun_value')
 
 user_session_activity = SubDagOperator(
     task_id=SUBDAG_TASK_ID,
