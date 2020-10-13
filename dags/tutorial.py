@@ -75,7 +75,7 @@ from airflow.operators.subdag_operator import SubDagOperator
 def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
     # uids = xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
     # , key='retrun_value'
-    uids = "{{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}"
+    uids = '''echo {{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='dag.ba_dag') }};'''
     sub_dag = DAG(
         dag_id=dag_id)
     for uid in uids[0:9]:
