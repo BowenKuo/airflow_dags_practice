@@ -49,7 +49,8 @@ volume_config = {
 }
 volume = Volume(name='git-root-path', configs=volume_config)
 
-start_date = "{{ ds }}"
+# start_date = "{{ ds }}"
+start_date = "2020-01-01"
 end_date = "{{ macros.ds_add(next_ds, -1) }}"
 
 get_user_ids_task = KubernetesPodOperator(namespace='default',
