@@ -77,7 +77,10 @@ def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
     # , key='retrun_value'
     uids = '''echo {{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='dag.ba_dag') }};'''
     sub_dag = DAG(
-        dag_id=dag_id)
+        dag_id=dag_id,
+        start_date = start_date,
+        end_date = end_date,
+        schedule_interval = None)
     for uid in uids[0:9]:
         user_session_activity = KubernetesPodOperator(namespace='default',
                                   image="bowenkuo/dump-ga-to-bq:1.0.1",
