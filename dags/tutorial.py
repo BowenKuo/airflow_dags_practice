@@ -72,10 +72,11 @@ get_user_ids_task = KubernetesPodOperator(namespace='default',
 
 SUBDAG_TASK_ID = "session_activity_dag"
 from airflow.operators.subdag_operator import SubDagOperator
-def get_user_session_activity(dag_id, start_date, end_date, uids):
+def get_user_session_activity(dag_id, start_date, end_date, **context):
     # uids = xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
     # , key='retrun_value'
     # uids = "''"
+    uids = context['ti'].xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag')
     sub_dag = DAG(
         dag_id=dag_id,
         start_date = datetime.now(),
@@ -109,8 +110,8 @@ user_session_activity = SubDagOperator(
     task_id=SUBDAG_TASK_ID,
     subdag=get_user_session_activity('%s.%s' % (MAIN_DAG_ID, SUBDAG_TASK_ID),
                start_date = start_date,
-               end_date = end_date,
-               uids = "'{{ ti.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}'"),
+               end_date = end_date) #,
+               # uids = "{{ ti.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}"),
     dag=main_dag)
 
 
