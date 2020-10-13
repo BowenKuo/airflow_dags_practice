@@ -76,7 +76,7 @@ def get_user_session_activity(dag_id, start_date, end_date, **context):
     # uids = xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
     # , key='retrun_value'
     # uids = "''"
-    uids = context['ti'].xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag')
+    uids = context['task_instance'].xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag')
     sub_dag = DAG(
         dag_id=dag_id,
         start_date = datetime.now(),
