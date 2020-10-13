@@ -49,8 +49,7 @@ volume_config = {
 }
 volume = Volume(name='git-root-path', configs=volume_config)
 
-# start_date = "{{ ds }}"
-start_date = "2020-01-01"
+start_date = "{{ ds }}"
 end_date = "{{ macros.ds_add(next_ds, -1) }}"
 
 get_user_ids_task = KubernetesPodOperator(namespace='default',
@@ -79,8 +78,7 @@ def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
     uids = '''echo {{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='dag.ba_dag') }};'''
     sub_dag = DAG(
         dag_id=dag_id,
-        start_date = datetime.strptime(start_date, "%Y-%m-%d"),
-        end_date = datetime.strptime(end_date, "%Y-%m-%d"),
+        start_date = datetime.now(),
         schedule_interval = None)
     for uid in uids[0:9]:
         user_session_activity = KubernetesPodOperator(namespace='default',
