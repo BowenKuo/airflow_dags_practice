@@ -81,6 +81,7 @@ def get_user_session_activity(dag_id, start_date, end_date, uids):
         dag_id=dag_id,
         start_date = datetime.now(),
         schedule_interval = None)
+    print(uids)
     for uid in uids[0:9]:
         user_session_activity = KubernetesPodOperator(namespace='default',
                                   image="bowenkuo/dump-ga-to-bq:1.0.1",
