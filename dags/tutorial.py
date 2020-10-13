@@ -72,10 +72,10 @@ get_user_ids_task = KubernetesPodOperator(namespace='default',
 
 SUBDAG_TASK_ID = "session_activity_dag"
 from airflow.operators.subdag_operator import SubDagOperator
-def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
+def get_user_session_activity(dag_id, start_date, end_date, uids):
     # uids = xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
     # , key='retrun_value'
-    uids = "'{{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}'"
+    # uids = "''"
     sub_dag = DAG(
         dag_id=dag_id,
         start_date = datetime.now(),
@@ -91,7 +91,7 @@ def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
                                              uid],
                                   secrets=[service_account_secret_file, client_secret_secret_file],
                                   name="main",
-                                  task_id="get_user_session_activity-%s" % uid,
+                                  task_id="get_user_session_activity_%s" % uid,
                                   volumes=[volume],
                                   volume_mounts=[volume_mount],
                                   is_delete_operator_pod=False,
@@ -109,7 +109,8 @@ user_session_activity = SubDagOperator(
     task_id=SUBDAG_TASK_ID,
     subdag=get_user_session_activity('%s.%s' % (MAIN_DAG_ID, SUBDAG_TASK_ID),
                start_date = start_date,
-               end_date = end_date),
+               end_date = end_date,
+               uids = "{{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}"),
     dag=main_dag)
 
 
