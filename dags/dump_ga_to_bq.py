@@ -22,7 +22,7 @@ default_args = {
 dag = DAG(
     'dump_ga_to_bq_dag',
     default_args=default_args,
-    schedule_interval='@quarterly',
+    schedule_interval='@monthly',
     catchup=True,
     max_active_runs=1)
 
