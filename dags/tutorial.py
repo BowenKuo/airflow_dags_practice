@@ -110,7 +110,7 @@ user_session_activity = SubDagOperator(
     task_id=SUBDAG_TASK_ID,
     subdag=get_user_session_activity('%s.%s' % (MAIN_DAG_ID, SUBDAG_TASK_ID),
                start_date = start_date,
-               end_date = end_date) #,
+               end_date = end_date ,
                # uids = "{{ ti.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}"),
     dag=main_dag)
 
