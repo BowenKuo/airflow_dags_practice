@@ -75,7 +75,7 @@ from airflow.operators.subdag_operator import SubDagOperator
 def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
     # uids = xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag', key='retrun_value')
     # , key='retrun_value'
-    uids = '''echo {{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='dag.ba_dag') }};'''
+    uids = "'{{ task_instance.xcom_pull(task_ids='get_user_ids_task', dag_id='ba_dag') }}'"
     sub_dag = DAG(
         dag_id=dag_id,
         start_date = datetime.now(),
@@ -96,7 +96,7 @@ def get_user_session_activity(dag_id, start_date, end_date,  **kwargs):
                                   volume_mounts=[volume_mount],
                                   is_delete_operator_pod=False,
                                   get_logs=True,
-                                  do_xcom_push=True,
+                                  do_xcom_push=False,
                                   dag=sub_dag
                                   )
     return sub_dag
