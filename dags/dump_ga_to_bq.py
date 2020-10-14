@@ -24,7 +24,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval='0 0 1 */3 *',
     catchup=True,
-    max_active_runs=3)
+    max_active_runs=2)
 
 service_account_secret_file = Secret(
     'volume', '/etc/ga_service_account', 'ga-service-account-json', 'ga-service-account.json')
