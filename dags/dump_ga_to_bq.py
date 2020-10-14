@@ -10,7 +10,7 @@ from airflow import DAG
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
-    'start_date': datetime(2020, 1, 1),
+    'start_date': datetime(2020, 7, 1),
     'end_date': datetime(2020, 9, 30),
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
