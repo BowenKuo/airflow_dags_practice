@@ -15,7 +15,7 @@ default_args = {
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
-    'retries': 2,
+    'retries': 1,
     'retry_delay': timedelta(seconds=10)
 }
 
@@ -24,7 +24,7 @@ dag = DAG(
     default_args=default_args,
     schedule_interval='0 0 1 */3 *',
     catchup=True,
-    max_active_runs=2)
+    max_active_runs=1)
 
 service_account_secret_file = Secret(
     'volume', '/etc/ga_service_account', 'ga-service-account-json', 'ga-service-account.json')
