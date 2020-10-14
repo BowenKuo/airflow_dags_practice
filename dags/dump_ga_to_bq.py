@@ -15,7 +15,7 @@ default_args = {
     'email': 'bowen.kuo@bonio.com.tw',
     'email_on_failure': True,
     'email_on_retry': False,
-    'retries': 5,
+    'retries': 2,
     'retry_delay': timedelta(seconds=10)
 }
 
